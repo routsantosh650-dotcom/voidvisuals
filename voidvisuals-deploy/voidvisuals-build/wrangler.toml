@@ -1,0 +1,38 @@
+name = "voidvisuals"
+main = "worker.ts"
+compatibility_date = "2025-04-01"
+
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
+
+[[durable_objects.bindings]]
+name = "OTP_DO"
+class_name = "OtpStore"
+
+[[migrations]]
+tag = "v1-otp-store"
+new_sqlite_classes = ["OtpStore"]
+
+[vars]
+# Public values only. Anything secret belongs in Settings > Secrets, never here.
+# VoidVisuals has its OWN Firebase project ("voidvisualsdb"), so nothing here points at Areex.
+# The Firestore database inside that project is Firebase's built-in "(default)" one — the literal
+# parentheses are the real database id, not a placeholder. Keep these three in sync with
+# firebase-applet-config.json (projectId / firestoreDatabaseId).
+FIREBASE_API_KEY = "AIzaSyDffRRx8lO7Z0sjRK9nStWBp3oTLSFrrjA"
+FIREBASE_PROJECT_ID = "voidvisualsdb"
+FIRESTORE_DATABASE_ID = "(default)"
+
+# EmailJS (free, 200 emails/month) sends the 6-digit admin login code.
+# Service + public key are shared with the Areex setup; the template below still carries
+# Areex wording, so clone it as a VoidVisuals template in emailjs.com and paste that
+# Template ID here. Use the full "template_xxxxxxx" id, not the short id in the editor URL.
+EMAILJS_SERVICE_ID = "service_gx4oyr5"
+EMAILJS_TEMPLATE_ID = "template_j9glx0m"
+EMAILJS_PUBLIC_KEY = "nEEzI9QKpyPQv_bP4"
+# EMAILJS_PRIVATE_KEY is intentionally absent — set it as a Cloudflare Worker Secret.
+
+# GEMINI_API_KEY is intentionally absent — Cloudflare Worker Secret (aistudio.google.com).
+# It powers the multilingual 24/7 studio chat (/api/support/ai). Without that Secret the
+# chat falls back to its built-in answers, so nothing on the site breaks.
