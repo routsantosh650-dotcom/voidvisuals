@@ -1,0 +1,171 @@
+/* ==========================================================================
+   Billing layer — the sticky cart pill, the checkout sheet, the animated bill
+   and the UPI payment pane. Colours come from the Aurora Ember tokens in
+   src/index.css; nothing here hard-codes a brand hue.
+   ========================================================================== */
+
+.cart-bar {
+  position: fixed;
+  right: 20px;
+  bottom: 148px;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: cart-in 0.45s var(--ease) both;
+}
+
+@keyframes cart-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+}
+
+.cart-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px 10px 12px;
+  border-radius: 999px;
+  background: #0a0704f2;
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px -24px #ff7a1899, 0 0 0 1px #ff7a1822 inset;
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s;
+}
+
+.cart-pill:hover { transform: translateY(-3px); box-shadow: 0 30px 70px -22px #ffb439bb; }
+
+.cart-ico { position: relative; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 12px; background: var(--grad-soft); border: 1px solid var(--line); color: var(--gold); }
+.cart-ico b {
+  position: absolute; top: -6px; right: -6px; min-width: 18px; height: 18px; padding: 0 4px;
+  border-radius: 999px; background: var(--grad); color: #fff; font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; font-weight: 700; display: grid; place-items: center; box-shadow: 0 0 14px #ff7a18aa;
+}
+.cart-txt { display: grid; line-height: 1.15; font-weight: 800; font-size: 15px; letter-spacing: -0.02em; text-align: left; }
+.cart-txt s { color: var(--text-3); font-weight: 600; font-size: 12px; margin-right: 6px; }
+.cart-txt small { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); font-weight: 600; }
+.cart-go { padding: 8px 14px; border-radius: 999px; background: var(--grad); font-size: 12.5px; font-weight: 800; }
+.cart-x { width: 28px; height: 28px; border-radius: 50%; background: #ffffff14; border: 1px solid var(--line-soft); color: #fff; cursor: pointer; display: grid; place-items: center; }
+.cart-x:hover { background: #ffffff26; }
+
+/* ---------- sheet ---------- */
+.sheet-veil { place-items: center start; padding: 22px 18px; }
+.sheet {
+  width: min(940px, 100%);
+  max-height: 94vh;
+  max-height: 94dvh;
+  overflow: auto;
+  padding: 26px 28px 30px;
+  animation: sheet-up 0.42s var(--ease) both;
+  scrollbar-width: thin;
+}
+@keyframes sheet-up { from { opacity: 0; transform: translateY(26px) scale(0.985); } }
+.sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.sheet-head h3 { margin: 8px 0 0; font-size: 26px; font-weight: 800; letter-spacing: -0.035em; }
+.sheet-form { margin-top: 22px; padding-top: 20px; border-top: 1px dashed var(--line); }
+
+/* ---------- bill ---------- */
+.bill { border-radius: 22px; background: #0b0704cc; border: 1px solid var(--line-soft); padding: 20px 22px; }
+.bill.recap { margin-top: 18px; }
+.bill-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 14px; border-bottom: 1px dashed var(--line); }
+.bill-top b { display: block; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
+.bill-lines { list-style: none; margin: 0; padding: 0; }
+.bill-lines li {
+  display: grid; grid-template-columns: 1fr auto auto 34px; align-items: center; gap: 16px;
+  padding: 14px 0; border-bottom: 1px solid #ffffff0f;
+  animation: line-in 0.4s var(--ease) both;
+}
+@keyframes line-in { from { opacity: 0; transform: translateX(-14px); } }
+.bill-lines li b { display: block; font-size: 15px; font-weight: 700; }
+.bill-lines li > div:first-child span { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-3); letter-spacing: 0.06em; }
+.bill-lines .amt { font-weight: 800; font-size: 15.5px; min-width: 92px; text-align: right; font-variant-numeric: tabular-nums; }
+.bill-lines .qty { display: flex; align-items: center; gap: 6px; }
+.bill-lines .qty b { min-width: 26px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 13.5px; }
+.bill-lines .qty button { width: 26px; height: 26px; border-radius: 9px; display: grid; place-items: center; background: #ffffff12; border: 1px solid var(--line-soft); color: #fff; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+.bill-lines .qty button:hover { background: var(--grad-soft); transform: translateY(-1px); }
+.bill-lines .del { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: none; border: 1px solid transparent; color: var(--text-3); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+.bill-lines .del:hover { color: #ffc0cf; border-color: #ff6b8a55; }
+.bill-lines .qty:only-child b, .bill.recap .qty button { display: none; }
+
+.bill-sum { margin-top: 16px; display: grid; gap: 8px; }
+.bill-sum > div { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; font-size: 14px; color: var(--text-2); }
+.bill-sum .off { color: #b9ffe0; }
+.bill-sum .total { margin-top: 6px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 16px; }
+.bill-sum .total b { font-size: 30px; font-weight: 800; letter-spacing: -0.04em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.bill-sum .approx { font-size: 12.5px; color: var(--text-3); }
+.fine { margin: 12px 0 0; font-size: 12px; line-height: 1.62; color: var(--text-3); }
+
+/* ---------- pay pane ---------- */
+.pay { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+.qr-box { position: relative; padding: 16px; border-radius: 26px; background: #fff; box-shadow: 0 30px 80px -30px #000000cc; }
+.qr-box svg { display: block; width: 100%; height: auto; }
+.qr-glow { position: absolute; inset: -20px; border-radius: 34px; border: 1px solid #ff7a1855; pointer-events: none; animation: ring 2.8s var(--ease) infinite; }
+.pay-side { display: grid; gap: 14px; }
+.pay-amount b { display: block; font-size: 34px; font-weight: 800; letter-spacing: -0.04em; }
+.pay-amount span { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-3); }
+.pay-amount small { display: block; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold); letter-spacing: 0.08em; }
+.pay-rows { display: flex; gap: 8px; flex-wrap: wrap; }
+.pay-rows .mini { text-decoration: none; }
+
+/* ---------- header cart chip ---------- */
+.hdr-cart {
+  position: relative; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center;
+  background: #ffffff12; border: 1px solid var(--line-soft); color: #fff; cursor: pointer;
+  transition: background 0.2s, transform 0.2s var(--ease), border-color 0.2s;
+}
+.hdr-cart:hover { background: #ffffff1f; transform: translateY(-2px); }
+.hdr-cart.is-on { border-color: #ff7a1866; background: var(--grad-soft); color: var(--gold); }
+.hdr-cart b {
+  position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 999px;
+  background: var(--grad); color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+  display: grid; place-items: center; box-shadow: 0 0 14px #ff7a1899;
+}
+
+/* ---------- order status pills ---------- */
+.st-awaiting-payment { color: #ffd58a; border-color: #ffc24b55; background: #ffc24b1f; }
+.st-paid { color: #b9ffe0; border-color: #31f5a055; background: #31f5a01f; }
+.st-building { color: #ffe1b3; border-color: #ffb43d55; background: #ffb43d1f; }
+/* "delivered" and "paid" reuse the mint pill from src/index.css — no override here. */
+.st-cancelled { color: #ffc0cf; border-color: #ff6b8a44; background: #ff6b8a1f; }
+
+@media (max-width: 860px) {
+  .pay { grid-template-columns: 1fr; }
+  .qr-box { max-width: 260px; margin: 0 auto; }
+  .sheet { padding: 20px 18px 24px; }
+  .bill-lines li { gap: 10px; }
+  .cart-bar { right: 12px; bottom: 112px; }
+}
+
+/* Phone: a 4-column line row cannot fit 320px, so each line becomes name + amount on the
+   first row and quantity + remove on the second. */
+@media (max-width: 560px) {
+  .sheet-veil { place-items: end center; padding: 10px; }
+  .sheet { padding: 18px 14px 20px; border-radius: 22px; }
+  .sheet-head h3 { font-size: 21px; }
+  .bill { padding: 16px; }
+  .bill-lines li {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'name amt' 'qty del';
+    row-gap: 10px;
+  }
+  .bill-lines li > div:first-child { grid-area: name; }
+  .bill-lines .qty { grid-area: qty; }
+  .bill-lines .amt { grid-area: amt; }
+  .bill-lines .del { grid-area: del; justify-self: end; }
+  .bill-sum .total b { font-size: 26px; }
+  .pay-amount b { font-size: 28px; }
+  .cart-bar { right: 10px; left: 10px; bottom: 84px; justify-content: flex-end; }
+}
+
+/* ---------- print: only the bill, on white ---------- */
+@media print {
+  body * { visibility: hidden !important; }
+  #bill-print, #bill-print * { visibility: visible !important; }
+  #bill-print {
+    position: absolute; left: 12px; top: 12px; width: calc(100% - 24px);
+    background: #fff !important; color: #101010 !important; border: 0 !important; box-shadow: none !important;
+  }
+  #bill-print * { color: #101010 !important; border-color: #d8d8d8 !important; }
+  #bill-print .total b { -webkit-text-fill-color: #101010; }
+}
